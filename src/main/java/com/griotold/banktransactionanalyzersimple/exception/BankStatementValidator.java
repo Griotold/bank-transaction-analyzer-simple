@@ -15,6 +15,33 @@ public class BankStatementValidator {
     private String date;
     private String amount;
 
+    // 노티피케이션 패턴 적용
+    public Notification validate() {
+        final Notification notification = new Notification();
+        if (this.description.length() > 100) {
+            notification.addError("The description is too long");
+        }
+
+        final LocalDate parsedDate;
+        try {
+            parsedDate = LocalDate.parse(date);
+            if (parsedDate.isAfter(LocalDate.now())) {
+                notification.addError("date cannot be in the future");
+            }
+        } catch (DateTimeParseException e) {
+            notification.addError("Invalid format for date");
+        }
+
+        final double amount;
+        try {
+            amount = Double.parseDouble(this.amount);
+        } catch (NumberFormatException e) {
+            notification.addError("Invalid format for amount");
+        }
+
+        return notification;
+    }
+
     // 과도하게 세밀한 검증
     public boolean validateOverlySpecific() throws DescriptionTooLongException,
             InvalidDateFormat,
