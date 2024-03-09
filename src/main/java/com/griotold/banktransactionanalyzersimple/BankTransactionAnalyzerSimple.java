@@ -14,22 +14,36 @@ public class BankTransactionAnalyzerSimple {
 
     public static void main(final String... args) throws IOException {
 
-        final Path path = Paths.get(RESOURCES + args[0]);
-        final List<String> lines = Files.readAllLines(path);
-        double total = 0d;
-        final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        final BankStatementCSVParser bankStatementParser = new BankStatementCSVParser();
 
-        // 1월 입출금 내역 합계
-        for (String line : lines) {
-            final String[] columns = line.split(",");
-            LocalDate date = LocalDate.parse(columns[0], DATE_PATTERN);
-            if (date.getMonth() == Month.JANUARY) {
-                final double amount = Double.parseDouble(columns[1]);
-                total += amount;
+        final String fileName = args[0];
+        final Path path = Paths.get(RESOURCES + fileName);
+        final List<String> lines = Files.readAllLines(path);
+
+        final List<BankTransaction> bankTransactions = bankStatementParser.parseLinesFromCSV(lines);
+
+        System.out.println("The total for all transaction is " + calculateTotalAmount(bankTransactions));
+
+        System.out.println("Transaction in January " + selectInMonth(bankTransactions, Month.JANUARY));
+    }
+
+    private static double calculateTotalAmount(List<BankTransaction> bankTransactions) {
+        double result = 0d;
+        for (BankTransaction bankTransaction : bankTransactions) {
+            result += bankTransaction.getAmount();
+        }
+        return result;
+    }
+
+    private static double selectInMonth(List<BankTransaction> bankTransactions, Month month) {
+        double result = 0d;
+        for (BankTransaction bankTransaction : bankTransactions) {
+            Month transactionMonth = bankTransaction.getDate().getMonth();
+            if (transactionMonth == month) {
+                result += bankTransaction.getAmount();
             }
         }
-
-        System.out.println("The total for all transactions in January is " + total);
+        return result;
     }
 
 }
