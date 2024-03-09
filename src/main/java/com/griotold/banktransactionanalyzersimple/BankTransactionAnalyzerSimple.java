@@ -28,12 +28,12 @@ public class BankTransactionAnalyzerSimple {
 
         // OCP 적용
         System.out.println("The total for transactions in February And Expensive is "
-                + bankStatementProcessor.findTransaction(new BankTransactionIsInFebruaryAndExpensive() {
+                + bankStatementProcessor.findTransactions(new BankTransactionIsInFebruaryAndExpensive() {
         }));
 
         // 람다 표현식을 적용하면 함수형 인터페이스를 구현할 필요가 없다.
         System.out.println("The toal for transactions in February And Expensive is "
-                + bankStatementProcessor.findTransaction((bankTransaction) ->
+                + bankStatementProcessor.findTransactions((bankTransaction) ->
                 bankTransaction.getDate().getMonth() == Month.FEBRUARY
                         && bankTransaction.getAmount() >= 1_000));
     }
