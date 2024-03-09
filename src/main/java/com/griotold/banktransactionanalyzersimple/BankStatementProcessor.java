@@ -42,14 +42,14 @@ public class BankStatementProcessor {
         }
         return result;
     }
+
     /**
-     * 아래 코드는 동작은 하지만 문제가 있는 코드다.
-     * 개방/폐쇄 원칙을 적용해서 리팩토링 해야 한다.
-     * */
-    public List<BankTransaction> findTransactionGreaterThanEqual(final int amount) {
+     * OCP 를 적용하여 리팩토링한 코드 - 권장
+     */
+    public List<BankTransaction> findTransaction(BankTransactionFilter filter) {
         final List<BankTransaction> result = new ArrayList<>();
         for (BankTransaction bankTransaction : bankTransactions) {
-            if (bankTransaction.getAmount() >= amount) {
+            if (filter.test(bankTransaction)) {
                 result.add(bankTransaction);
             }
         }

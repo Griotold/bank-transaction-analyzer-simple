@@ -25,6 +25,11 @@ public class BankTransactionAnalyzerSimple {
         System.out.println("The total for transactions in January is " + bankStatementProcessor.calculateTotalInMonth(Month.JANUARY));
         System.out.println("The total for transactions in Feburary is " + bankStatementProcessor.calculateTotalInMonth(Month.FEBRUARY));
         System.out.println("The total salary received is " + bankStatementProcessor.calculateTotalForCategory("Salary"));
+
+        // OCP 적용
+        System.out.println("The total for transactions in February And Expesnsive is "
+                + bankStatementProcessor.findTransaction(new BankTransactionIsInFebruaryAndExpensive() {
+        }));
     }
 
 }
